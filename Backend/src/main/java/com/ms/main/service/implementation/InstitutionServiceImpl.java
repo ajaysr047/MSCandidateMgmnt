@@ -30,7 +30,6 @@ public class InstitutionServiceImpl implements InstitutionService {
 
         if(location.isPresent()){
             Institution persistentInstitution = institutionRepository.save(new Institution(institution.getName(), location.get()));
-
             return new AddInstitutionResponse(true, persistentInstitution.getInstitutionId(), persistentInstitution.getName(), location.get().getName());
         }
         return new AddInstitutionResponse(false, Constants.FAILURE_INSTITUTION_ID, Constants.EMPTY_RESPONSE_STRING, Constants.EMPTY_RESPONSE_STRING);

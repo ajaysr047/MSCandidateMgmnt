@@ -43,6 +43,10 @@ public class Constants {
 
     public static final String ADD_CANDIDATE_SUCCESS_MESSAGE = "Candidate added successfully!";
 
+    public static final String GET_CANDIDATES_FAILURE_MESSAGE = "No candidates found!";
+
+    public static final String GET_CANDIDATES_SUCCESS_MESSAGE = "Get all candidates success!";
+
     public static final int BOUND_FOR_DUMMY_IMAGES = 4;
 
     public static final int BOUND_OFFSET = 1;

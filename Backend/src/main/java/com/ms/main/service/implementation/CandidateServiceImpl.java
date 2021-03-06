@@ -5,6 +5,7 @@ import com.ms.main.entity.*;
 import com.ms.main.repository.*;
 import com.ms.main.request.AddCandidate;
 import com.ms.main.response.AddCandidateResponse;
+import com.ms.main.response.GetAllCandidateResponse;
 import com.ms.main.service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,5 +64,33 @@ public class CandidateServiceImpl implements CandidateService {
             }
         }
         return new AddCandidateResponse(false, Constants.ADD_CANDIDATE_FAILURE_DUPLICATE_MESSAGE, Constants.EMPTY_RESPONSE_STRING, Constants.FAILURE_CANDIDATE_ID);
+    }
+
+    @Override
+    public GetAllCandidateResponse getAllActiveCandidates() {
+        List<Candidate> candidateList = candidateRepository.findAll();
+        if(candidateList.isEmpty()){
+
+            return new GetAllCandidateResponse(false, Constants.GET_CANDIDATES_FAILURE_MESSAGE, candidateList);
+        }
+        GetAllCandidateResponse response = new GetAllCandidateResponse();
+        response.setSuccess(true);
+        response.setMessage(Constants.GET_CANDIDATES_SUCCESS_MESSAGE);
+
+        candidateList.forEach(candidate -> {if(candidate.isActive()){
+                response.getCandidateList().add(candidate);
+            }
+        });
+
+        return response;
+    }
+
+    @Override
+    public GetAllCandidateResponse getAllCandidates() {
+        List<Candidate> candidateList = candidateRepository.findAll();
+        if(candidateList.isEmpty()){
+            return new GetAllCandidateResponse(false, Constants.GET_CANDIDATES_FAILURE_MESSAGE, candidateList);
+        }
+        return new GetAllCandidateResponse(true, Constants.GET_CANDIDATES_SUCCESS_MESSAGE, candidateList);
     }
 }
