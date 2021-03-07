@@ -5,6 +5,7 @@ import com.ms.main.entity.*;
 import com.ms.main.repository.*;
 import com.ms.main.request.AddCandidate;
 import com.ms.main.response.AddCandidateResponse;
+import com.ms.main.response.DeleteCandidateResponse;
 import com.ms.main.response.GetAllCandidateResponse;
 import com.ms.main.service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +93,17 @@ public class CandidateServiceImpl implements CandidateService {
             return new GetAllCandidateResponse(false, Constants.GET_CANDIDATES_FAILURE_MESSAGE, candidateList);
         }
         return new GetAllCandidateResponse(true, Constants.GET_CANDIDATES_SUCCESS_MESSAGE, candidateList);
+    }
+
+    @Override
+    public DeleteCandidateResponse deleteCandidate(Integer id) {
+        Optional<Candidate> candidate = candidateRepository.findById(id);
+        if(candidate.isEmpty()){
+            return new DeleteCandidateResponse(false, Constants.DELETE_CANDIDATE_FAILURE_MESSAGE);
+        }
+        candidate.get().setActive(false);
+        candidateRepository.save(candidate.get());
+
+        return  new DeleteCandidateResponse(true, Constants.DELETE_CANDIDATE_SUCCESS_MESSAGE);
     }
 }
