@@ -61,7 +61,7 @@ public class CandidateServiceImpl implements CandidateService {
 
                 candidate.getSkillSet().forEach(skill -> skillRepository.save(new Skill(candidateId, skill)));
 
-                return new AddCandidateResponse(true, Constants.ADD_CANDIDATE_SUCCESS_MESSAGE, persistentCandidate.getName(), createdByUser.get().getUserId());
+                return new AddCandidateResponse(true, Constants.ADD_CANDIDATE_SUCCESS_MESSAGE, persistentCandidate.getName(), persistentCandidate.getCandidateId());
             }
         }
         return new AddCandidateResponse(false, Constants.ADD_CANDIDATE_FAILURE_DUPLICATE_MESSAGE, Constants.EMPTY_RESPONSE_STRING, Constants.FAILURE_CANDIDATE_ID);
