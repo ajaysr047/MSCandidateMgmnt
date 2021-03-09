@@ -51,6 +51,10 @@ public class Constants {
 
     public static final String DELETE_CANDIDATE_SUCCESS_MESSAGE = "Candidate deleted successfully!";
 
+    public static final String UPDATE_CANDIDATE_SUCCESS_MESSAGE = "Candidate update success!";
+
+    public static final String UPDATE_CANDIDATE_FAILURE_MESSAGE = "Candidate update failed!";
+
     public static final int BOUND_FOR_DUMMY_IMAGES = 4;
 
     public static final int BOUND_OFFSET = 1;

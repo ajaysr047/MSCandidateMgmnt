@@ -4,13 +4,16 @@ import com.ms.main.constants.Constants;
 import com.ms.main.entity.*;
 import com.ms.main.repository.*;
 import com.ms.main.request.AddCandidate;
+import com.ms.main.request.UpdateCandidate;
 import com.ms.main.response.AddCandidateResponse;
 import com.ms.main.response.DeleteCandidateResponse;
 import com.ms.main.response.GetAllCandidateResponse;
+import com.ms.main.response.UpdateCandidateResponse;
 import com.ms.main.service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -105,5 +108,29 @@ public class CandidateServiceImpl implements CandidateService {
         candidateRepository.save(candidate.get());
 
         return  new DeleteCandidateResponse(true, Constants.DELETE_CANDIDATE_SUCCESS_MESSAGE);
+    }
+
+    @Override
+    @Transactional
+    public UpdateCandidateResponse updateCandidate(UpdateCandidate candidate) {
+        Optional<Candidate> persistentCandidate = candidateRepository.findByEmail(candidate.getEmail());
+
+        if(persistentCandidate.isEmpty()){
+
+            return new UpdateCandidateResponse(false, Constants.UPDATE_CANDIDATE_FAILURE_MESSAGE);
+        }
+
+        Integer candidateId = persistentCandidate.get().getCandidateId();
+        skillRepository.deleteAllByCandidateId(candidateId);
+
+        candidate.getSkillSet().forEach(skill -> skillRepository.save(new Skill(persistentCandidate.get().getCandidateId(), skill)));
+
+        persistentCandidate.get().setDescription(candidate.getDescription());
+        persistentCandidate.get().setPhoneNumber(candidate.getPhoneNumber());
+        persistentCandidate.get().setFeedback(candidate.getFeedback());
+
+        candidateRepository.save(persistentCandidate.get());
+
+        return new UpdateCandidateResponse(true, Constants.UPDATE_CANDIDATE_SUCCESS_MESSAGE);
     }
 }

@@ -2,9 +2,11 @@ package com.ms.main.controller;
 
 
 import com.ms.main.request.AddCandidate;
+import com.ms.main.request.UpdateCandidate;
 import com.ms.main.response.AddCandidateResponse;
 import com.ms.main.response.DeleteCandidateResponse;
 import com.ms.main.response.GetAllCandidateResponse;
+import com.ms.main.response.UpdateCandidateResponse;
 import com.ms.main.service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,6 +58,16 @@ public class CandidateController {
             return ResponseEntity.ok(response);
         }
 
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<UpdateCandidateResponse> updateCandidate(@Valid @RequestBody UpdateCandidate candidate){
+        UpdateCandidateResponse response = candidateService.updateCandidate(candidate);
+
+        if(response.isSuccess()){
+            return ResponseEntity.ok(response);
+        }
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }
