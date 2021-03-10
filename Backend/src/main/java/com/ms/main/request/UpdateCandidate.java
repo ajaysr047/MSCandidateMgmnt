@@ -1,11 +1,11 @@
 package com.ms.main.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Getter
@@ -25,5 +25,8 @@ public class UpdateCandidate {
 
     @NotEmpty(message = "At least one skill must be added!")
     private Set<String> skillSet;
+
+    @JsonProperty
+    boolean isActive = true;
 
 }

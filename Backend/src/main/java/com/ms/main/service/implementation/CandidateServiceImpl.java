@@ -128,6 +128,7 @@ public class CandidateServiceImpl implements CandidateService {
         persistentCandidate.get().setDescription(candidate.getDescription());
         persistentCandidate.get().setPhoneNumber(candidate.getPhoneNumber());
         persistentCandidate.get().setFeedback(candidate.getFeedback());
+        persistentCandidate.get().setActive(candidate.isActive());
 
         candidateRepository.save(persistentCandidate.get());
 

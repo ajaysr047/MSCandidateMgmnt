@@ -55,6 +55,10 @@ public class Constants {
 
     public static final String UPDATE_CANDIDATE_FAILURE_MESSAGE = "Candidate update failed!";
 
+    public static final String GET_USERS_SUCCESS_MESSAGE = "Get all users success!";
+
+    public static final String GET_USERS_FAILURE_MESSAGE = "Get all users failed!";
+
     public static final int BOUND_FOR_DUMMY_IMAGES = 4;
 
     public static final int BOUND_OFFSET = 1;

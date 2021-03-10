@@ -64,7 +64,6 @@ public class CandidateController {
     @PutMapping("/update")
     public ResponseEntity<UpdateCandidateResponse> updateCandidate(@Valid @RequestBody UpdateCandidate candidate){
         UpdateCandidateResponse response = candidateService.updateCandidate(candidate);
-
         if(response.isSuccess()){
             return ResponseEntity.ok(response);
         }

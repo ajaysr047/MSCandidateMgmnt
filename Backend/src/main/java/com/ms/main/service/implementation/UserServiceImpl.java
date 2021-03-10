@@ -5,6 +5,7 @@ import com.ms.main.entity.User;
 import com.ms.main.repository.UserRepository;
 import com.ms.main.request.Credentials;
 import com.ms.main.request.UserSignup;
+import com.ms.main.response.GetAllUserResponse;
 import com.ms.main.response.SignInResponse;
 import com.ms.main.response.SignupResponse;
 import com.ms.main.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -53,6 +55,16 @@ public class UserServiceImpl implements UserService {
             return new SignInResponse(true, user.get().getName(), user.get().getEmail(), user.get().getUserId(), user.get().getRole(), Constants.SIGN_IN_SUCCESS_MESSAGE);
         }
         return new SignInResponse(false, Constants.EMPTY_RESPONSE_STRING, Constants.EMPTY_RESPONSE_STRING, Constants.FAILURE_USER_ID, Constants.EMPTY_RESPONSE_STRING, Constants.SIGN_IN_FAILED_MESSAGE);
+    }
+
+    @Override
+    public GetAllUserResponse getUsers() {
+        List<User> userList = userRepository.findAll();
+        if(userList.isEmpty()){
+
+            return new GetAllUserResponse(false, Constants.GET_USERS_FAILURE_MESSAGE, userList);
+        }
+        return new GetAllUserResponse(true, Constants.GET_USERS_SUCCESS_MESSAGE, userList);
     }
 
     private String encryptPassword(String plainPassword) {
