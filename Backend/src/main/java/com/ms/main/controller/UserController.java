@@ -1,6 +1,7 @@
 package com.ms.main.controller;
 
 import com.ms.main.request.Credentials;
+import com.ms.main.request.GoogleSignIn;
 import com.ms.main.request.UserSignup;
 import com.ms.main.response.GetAllUserResponse;
 import com.ms.main.response.SignInResponse;
@@ -43,6 +44,14 @@ public class UserController {
 
             return ResponseEntity.ok(response);
         }
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/googleSignIn")
+    public ResponseEntity<SignInResponse> googleSignIn(@Valid @RequestBody GoogleSignIn googleSignIn){
+        SignInResponse response = userService.googleSignIn(googleSignIn);
+        if(response.isValid())
+            return ResponseEntity.ok(response);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 

@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MsCandidateMgmtBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MsCandidateMgmtBackendApplication.class, args);
+		SpringApplication.run(MsCandidateMgmtBackendApplication.class);
 	}
 
 }

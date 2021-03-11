@@ -10,6 +10,8 @@ import com.ms.main.response.DeleteCandidateResponse;
 import com.ms.main.response.GetAllCandidateResponse;
 import com.ms.main.response.UpdateCandidateResponse;
 import com.ms.main.service.CandidateService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.*;
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
+
+    Logger logger = LoggerFactory.getLogger(CandidateServiceImpl.class);
 
     @Autowired
     CandidateRepository candidateRepository;
@@ -43,10 +47,13 @@ public class CandidateServiceImpl implements CandidateService {
             Optional<User> createdByUser = userRepository.findById(candidate.getCreatedUserId());
 
             if(location.isEmpty()){
+                logger.warn("Location invalid!, Add candidate failed!");
                 return new AddCandidateResponse(false, Constants.ADD_CANDIDATE_FAILURE_LOCATION_MESSAGE, Constants.EMPTY_RESPONSE_STRING, Constants.FAILURE_CANDIDATE_ID);
             }else if(institution.isEmpty()){
+                logger.warn("Institution invalid!, Add candidate failed!");
                 return new AddCandidateResponse(false, Constants.ADD_CANDIDATE_FAILURE_INSTITUTION_MESSAGE, Constants.EMPTY_RESPONSE_STRING, Constants.FAILURE_CANDIDATE_ID);
             }else if(createdByUser.isEmpty()){
+                logger.warn("Created user invalid!, Add candidate failed!");
                 return new AddCandidateResponse(false, Constants.ADD_CANDIDATE_FAILURE_USER_MESSAGE, Constants.EMPTY_RESPONSE_STRING, Constants.FAILURE_CANDIDATE_ID);
             }else{
 
@@ -63,10 +70,11 @@ public class CandidateServiceImpl implements CandidateService {
                 Integer candidateId = persistentCandidate.getCandidateId();
 
                 candidate.getSkillSet().forEach(skill -> skillRepository.save(new Skill(candidateId, skill)));
-
+                logger.info("Candidate created successfully!");
                 return new AddCandidateResponse(true, Constants.ADD_CANDIDATE_SUCCESS_MESSAGE, persistentCandidate.getName(), persistentCandidate.getCandidateId());
             }
         }
+        logger.warn("Add candidate failed!, Duplicate Email!");
         return new AddCandidateResponse(false, Constants.ADD_CANDIDATE_FAILURE_DUPLICATE_MESSAGE, Constants.EMPTY_RESPONSE_STRING, Constants.FAILURE_CANDIDATE_ID);
     }
 
@@ -74,7 +82,7 @@ public class CandidateServiceImpl implements CandidateService {
     public GetAllCandidateResponse getAllActiveCandidates() {
         List<Candidate> candidateList = candidateRepository.findAll();
         if(candidateList.isEmpty()){
-
+            logger.warn("Get all candidates failed!, No active candidates found!");
             return new GetAllCandidateResponse(false, Constants.GET_CANDIDATES_FAILURE_MESSAGE, candidateList);
         }
         GetAllCandidateResponse response = new GetAllCandidateResponse();
@@ -85,7 +93,7 @@ public class CandidateServiceImpl implements CandidateService {
                 response.getCandidateList().add(candidate);
             }
         });
-
+        logger.info("Get all active candidates success!");
         return response;
     }
 
@@ -93,8 +101,10 @@ public class CandidateServiceImpl implements CandidateService {
     public GetAllCandidateResponse getAllCandidates() {
         List<Candidate> candidateList = candidateRepository.findAll();
         if(candidateList.isEmpty()){
+            logger.warn("Get all candidates failed!, No candidates found!");
             return new GetAllCandidateResponse(false, Constants.GET_CANDIDATES_FAILURE_MESSAGE, candidateList);
         }
+        logger.info("Get all candidates success!");
         return new GetAllCandidateResponse(true, Constants.GET_CANDIDATES_SUCCESS_MESSAGE, candidateList);
     }
 
@@ -102,11 +112,12 @@ public class CandidateServiceImpl implements CandidateService {
     public DeleteCandidateResponse deleteCandidate(Integer id) {
         Optional<Candidate> candidate = candidateRepository.findById(id);
         if(candidate.isEmpty()){
+            logger.warn("Candidate deactivate failed!, No candidate found!");
             return new DeleteCandidateResponse(false, Constants.DELETE_CANDIDATE_FAILURE_MESSAGE);
         }
         candidate.get().setActive(false);
         candidateRepository.save(candidate.get());
-
+        logger.info("Candidate successfully deactivated!");
         return  new DeleteCandidateResponse(true, Constants.DELETE_CANDIDATE_SUCCESS_MESSAGE);
     }
 
@@ -116,7 +127,7 @@ public class CandidateServiceImpl implements CandidateService {
         Optional<Candidate> persistentCandidate = candidateRepository.findByEmail(candidate.getEmail());
 
         if(persistentCandidate.isEmpty()){
-
+            logger.warn("Update candidate failed!, No candidate found!");
             return new UpdateCandidateResponse(false, Constants.UPDATE_CANDIDATE_FAILURE_MESSAGE);
         }
 
@@ -131,7 +142,7 @@ public class CandidateServiceImpl implements CandidateService {
         persistentCandidate.get().setActive(candidate.isActive());
 
         candidateRepository.save(persistentCandidate.get());
-
+        logger.info("Candidate update success!");
         return new UpdateCandidateResponse(true, Constants.UPDATE_CANDIDATE_SUCCESS_MESSAGE);
     }
 }

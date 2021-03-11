@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -27,7 +28,7 @@ public class AddCandidate {
     private String feedback;
 
     @NotEmpty(message = "At least one skill must be added!")
-    private Set<String> skillSet;
+    private Set<String> skillSet = new HashSet<>();
 
     @NotNull(message = "Joining Location Id cannot be empty!")
     private Integer joiningLocationId;

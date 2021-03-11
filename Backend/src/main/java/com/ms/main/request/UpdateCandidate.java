@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -24,7 +25,7 @@ public class UpdateCandidate {
     private String feedback;
 
     @NotEmpty(message = "At least one skill must be added!")
-    private Set<String> skillSet;
+    private Set<String> skillSet = new HashSet<>();
 
     @JsonProperty
     boolean isActive = true;

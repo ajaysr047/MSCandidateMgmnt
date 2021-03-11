@@ -16,13 +16,16 @@ public class AddInstitutionResponse {
 
     private String locationName;
 
+    private String message;
+
     public AddInstitutionResponse() {
     }
 
-    public AddInstitutionResponse(boolean isSuccess, Integer institutionId, String name, String locationName) {
+    public AddInstitutionResponse(boolean isSuccess, Integer institutionId, String name, String locationName, String message) {
         this.isSuccess = isSuccess;
         this.institutionId = institutionId;
         this.name = name;
         this.locationName = locationName;
+        this.message = message;
     }
 }
